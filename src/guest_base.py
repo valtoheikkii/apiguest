@@ -76,7 +76,7 @@ def get_service_response(service_name, data):
 	else:
 		final_header["Content-Type"] = "application/json"
 
-	ret = discover_service(consul_server, "user")
+	ret = discover_service(consul_server, "user-account")
 	service_addr= ret[0]["Address"]
 	service_port = ret[0]["ServicePort"]
 	user_service = "http://" + service_addr + ":" + str(service_port) + "/"+service_name
