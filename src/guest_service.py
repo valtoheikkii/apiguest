@@ -51,9 +51,9 @@ def reset_password():
 
 	return jsonify(item), status_code
 
-if __name__ == "__main__":
-	app.logger.addHandler(get_logging_handler(consul_server))
-	if is_local_or_dev_environment(consul_server):
-		app.run(debug=True,host='0.0.0.0')
-	else:
-		app.run(debug=False,host='0.0.0.0')
+# if __name__ == "__main__":
+# 	app.logger.addHandler(get_logging_handler(consul_server))
+# 	if is_local_or_dev_environment(consul_server):
+# 		app.run(debug=True,host='0.0.0.0')
+# 	else:
+# 		app.run(debug=False,host='0.0.0.0')

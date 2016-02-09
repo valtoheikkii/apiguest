@@ -21,4 +21,4 @@ RUN rm -rf common-repo
 
 RUN pip install -r requirements.txt
 RUN pip install -r common/requirements.txt
-CMD ["python", "-u", "guest_service.py"]
+CMD ["gunicorn", "--config=gunicorn.py", "guest_service:app"]
