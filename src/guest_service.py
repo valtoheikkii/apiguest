@@ -1,15 +1,16 @@
 from flask import Flask, request, jsonify
 import os
 
-from common.config_manager import get_logging_handler, get_logger, is_local_or_dev_environment
+from common.config_manager import get_logging_handler, is_local_or_dev_environment
 from common.helper import get_consul_server
 
 import guest_base
+from common.log_writer import *
 
 app = Flask(__name__)
 
 consul_server = get_consul_server()
-logger = get_logger(consul_server)
+logger = get_logger("guest-service")
 
 @app.errorhandler(500)
 def internal_server_error(error):
@@ -21,39 +22,44 @@ def not_found_error(error):
 
 @app.route("/signup", methods = ["POST"])
 def signup():
+	try:
 
-	data = request.get_json(force=False, silent=True)
-	if not data:
-		return jsonify({"error": True, "msg": "Request was not understood"}), 500	
-	
-	user_struct, status_code = guest_base.signup(data)
+		data = request.get_json(force=False, silent=True)
+		if not data:
+			return jsonify({"error": True, "msg": "Request was not understood"}), 500	
+		
+		user_struct, status_code = guest_base.signup(data)
 
-	return jsonify(user_struct), status_code
+		return jsonify(user_struct), status_code
+
+	except Exception as e:
+		error(logger, e)
 
 
 @app.route("/login", methods = ["POST"])
 def login():
-	
-	data = request.get_json(force=False, silent=True)
+	try:
 
-	ret_msg, status_code = guest_base.login(data)
+		data = request.get_json(force=False, silent=True)
 
-	return jsonify(ret_msg), status_code
+		ret_msg, status_code = guest_base.login(data)
+
+		return jsonify(ret_msg), status_code
+
+	except Exception as e:
+		error(logger, e)
 
 @app.route("/resetpassword", methods = ["POST"])
 def reset_password():
-	
-	data = request.get_json(force=False, silent=True)
-	if not data:
-		return jsonify({"error": True, "msg": "Request was not understood"}), 500
-	
-	item, status_code = guest_base.reset_password(data)
+	try:
 
-	return jsonify(item), status_code
+		data = request.get_json(force=False, silent=True)
+		if not data:
+			return jsonify({"error": True, "msg": "Request was not understood"}), 500
+		
+		item, status_code = guest_base.reset_password(data)
 
-# if __name__ == "__main__":
-# 	app.logger.addHandler(get_logging_handler(consul_server))
-# 	if is_local_or_dev_environment(consul_server):
-# 		app.run(debug=True,host='0.0.0.0')
-# 	else:
-# 		app.run(debug=False,host='0.0.0.0')
+		return jsonify(item), status_code
+
+	except Exception as e:
+		error(logger, e)
