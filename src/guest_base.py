@@ -23,14 +23,14 @@ def signup(data):
 	if status_code != 201:
 		return ret_msg, status_code
 
-	user_id = ret_msg["EntityID"]
-	user_struct = ret_msg
-	pwd = ret_msg["HashedPassword"]
-	token = base64_encode(ret_msg["Email"] + ":" + pwd)
-	user_struct["AuthToken"] = token
+	# user_id = ret_msg["EntityID"]
+	# user_struct = ret_msg
+	# pwd = ret_msg["HashedPassword"]
+	# token = base64_encode(ret_msg["Email"] + ":" + pwd)
+	# user_struct["AuthToken"] = token
 	# final_header["User-Id"] = user_id	
 
-	return user_struct, 201
+	return {"Status": "success"}, 201
 
 def login(data):
 	if not data:
