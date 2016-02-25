@@ -1,13 +1,14 @@
 from flask import request
 import os
 import requests
-from common.config_manager import discover_service, get_logger
+from common.config_manager import discover_service
 from common.helper import base64_encode, get_consul_server
 import json
 from validate_email import validate_email
+from common.log_writer import *
 
 consul_server = get_consul_server()
-logger = get_logger(consul_server)
+logger = get_logger("guest-base")
 
 def signup(data):
 	if "email" not in data:
@@ -17,7 +18,7 @@ def signup(data):
 
 	if "OrganizationName" not in data:
 		return {"error": True, "msg": "OrganizationName not provided"}, 404
-	
+	debug(logger,"calling user create...")
 	#Sign up users are created as System Administrators	
 	ret_msg, status_code = get_service_response("create", {"Email": data["email"], "OrganizationName": data["OrganizationName"], "PermissionLevel":0})
 	if status_code != 201:
