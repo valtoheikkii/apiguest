@@ -47,7 +47,7 @@ def login(data):
 		return {}, status_code
 
 	pwd = ret_msg["HashedPassword"]
-	token = base64_encode(data["username"] + ":" + pwd)
+	token = base64_encode(data["username"].lower() + ":" + pwd)
 	ret_msg.pop("HashedPassword")
 	ret_msg["AuthToken"] = token
 
