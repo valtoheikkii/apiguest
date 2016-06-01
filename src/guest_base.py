@@ -43,7 +43,9 @@ def login(data):
 		
 	ret_msg, status_code = get_service_response("login", data)
 
-	if "error" in ret_msg:
+	debug(logger, status_code)
+	
+	if "error" in ret_msg or status_code != 200:
 		return ret_msg, status_code
 		
 	if "HashedPassword" not in ret_msg:
