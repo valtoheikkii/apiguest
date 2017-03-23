@@ -6,6 +6,8 @@ from common.helper import get_consul_server
 
 import guest_base
 from common.log_writer import *
+import common.services_helper
+import json
 
 app = Flask(__name__)
 
@@ -60,6 +62,21 @@ def reset_password():
 		item, status_code = guest_base.reset_password(data)
 
 		return jsonify(item), status_code
+
+	except Exception as e:
+		error(logger, e)
+
+@app.route("/clientIds", methods = ["GET"])
+def get_client_ids():
+	try:
+
+		clients = common.services_helper.get_all_clients()
+		client_ids=[]
+
+		for client in clients:
+			client_ids.append(client["EntityID"])			
+
+		return json.dumps(client_ids), 200
 
 	except Exception as e:
 		error(logger, e)
