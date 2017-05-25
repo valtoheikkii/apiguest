@@ -77,6 +77,9 @@ def get_service_response(service_name, data):
 	final_header = {}
 	final_header["User-Agent"] = request_headers["User-Agent"]
 
+	if "X-Forwarded-For" in request_headers:
+		final_header["X-Forwarded-For"] = request_headers["X-Forwarded-For"]
+	
 	if "Content-Type" in request_headers:
 		final_header["Content-Type"] = request_headers["Content-Type"]
 	else:
