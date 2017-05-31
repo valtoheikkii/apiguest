@@ -55,6 +55,10 @@ def login(data):
 	token = base64_encode(data["username"].lower() + ":" + pwd)
 	ret_msg.pop("HashedPassword")
 	ret_msg["AuthToken"] = token
+	ret_msg["Gmail"] = "others"
+	if "gmail" in data["username"]:
+		ret_msg["Gmail"] = "gmail"
+	debug(logger, ret_msg)
 
 	return ret_msg, 200
 
